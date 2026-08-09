@@ -164,11 +164,15 @@
   .pas-block.type-simple::before{background:var(--lime);}
   .pas-block.type-alterne::before{background:var(--coral);}
   .pas-block .video-ph{
-    height:70px;border-radius:8px;background:var(--surface-raised);
+    height:90px;border-radius:8px;
     display:flex;align-items:center;justify-content:center;margin-bottom:12px;
-    color:var(--text-muted);
+    color:rgba(255,255,255,0.85);
+    background-size:cover;background-position:center;
+    position:relative;
+    overflow:hidden;
   }
-  .pas-block .video-ph svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;}
+  .pas-block .video-ph::after{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.18);}
+  .pas-block .video-ph svg{width:22px;height:22px;stroke:currentColor;fill:currentColor;stroke-width:1.6;position:relative;z-index:1;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.6));}
   .pas-block h4{font-size:14.5px;font-weight:800;margin-bottom:6px;}
   .pas-block .meta{display:flex;justify-content:space-between;align-items:center;}
   .beat-dots{display:flex;gap:3px;}
@@ -437,47 +441,47 @@
 <script>
 /* ============ DONNEES ============ */
 const PAS = [
-  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4"},
-  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4"},
-  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4"},
-  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4"},
-  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4"},
-  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4"},
-  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4"},
-  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4"},
-  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4"},
-  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4"},
-  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4"},
-  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4"},
-  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4"},
-  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4"},
-  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4"},
-  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4"},
-  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4"},
-  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4"},
-  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4"},
-  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4"},
-  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4"},
-  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4"},
-  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4"},
-  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4"},
-  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4"},
-  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4"},
-  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4"},
-  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4"},
-  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4"},
-  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4"},
-  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4"},
-  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4"},
-  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4"},
-  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4"},
-  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4"},
-  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4"},
-  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4"},
-  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4"},
-  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4"},
-  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4"},
-  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4"},
+  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4",poster:"posters/01_Basic.jpg"},
+  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4",poster:"posters/02_Jog.jpg"},
+  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4",poster:"posters/03_Pendulum.jpg"},
+  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4",poster:"posters/04_V_Step.jpg"},
+  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4",poster:"posters/05_V_step_saute.jpg"},
+  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4",poster:"posters/06_V_step_bloque.jpg"},
+  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4",poster:"posters/07_Reverse_turn.jpg"},
+  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4",poster:"posters/08_Across.jpg"},
+  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4",poster:"posters/09_Across_chasse.jpg"},
+  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4",poster:"posters/10_Revolving_door.jpg"},
+  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4",poster:"posters/11_Revolving_chasse.jpg"},
+  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4",poster:"posters/12_Basic_Cheval.jpg"},
+  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4",poster:"posters/13_Cheval_chasse.jpg"},
+  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4",poster:"posters/14_Genou_cheval.jpg"},
+  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4",poster:"posters/15_Dobble_lunge_side.jpg"},
+  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4",poster:"posters/16_T_step.jpg"},
+  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4",poster:"posters/17_Lunge_side_demi_tour.jpg"},
+  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4",poster:"posters/18_Jazz_square.jpg"},
+  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4",poster:"posters/19_Box_step.jpg"},
+  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4",poster:"posters/20_Pivot_turn.jpg"},
+  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4",poster:"posters/21_Tap_up.jpg"},
+  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4",poster:"posters/22_Pony.jpg"},
+  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4",poster:"posters/23_Genou_simple.jpg"},
+  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4",poster:"posters/24_3_Genoux_repeat.jpg"},
+  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4",poster:"posters/25_Knee_up_twist.jpg"},
+  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4",poster:"posters/26_Knee_up_ciseaux.jpg"},
+  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4",poster:"posters/27_Genou_L.jpg"},
+  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4",poster:"posters/28_Genou_L_tape_derriere.jpg"},
+  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4",poster:"posters/29_Genou_L_touche_step.jpg"},
+  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4",poster:"posters/30_Kick_simple.jpg"},
+  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4",poster:"posters/31_Kick_impulsion.jpg"},
+  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4",poster:"posters/32_Heel_up_simple.jpg"},
+  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4",poster:"posters/33_Heel_up_impulsion.jpg"},
+  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4",poster:"posters/34_Back_lift_simple.jpg"},
+  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4",poster:"posters/35_Side_lift_simple.jpg"},
+  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4",poster:"posters/36_Lunge_side.jpg"},
+  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4",poster:"posters/37_Mambo_chasse.jpg"},
+  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4",poster:"posters/38_Kick_repeat.jpg"},
+  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4",poster:"posters/39_Heel_up_repeat.jpg"},
+  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4",poster:"posters/40_Back_lift_repeat.jpg"},
+  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4",poster:"posters/41_Side_lift_repeat.jpg"},
 ];
 
 /* ============ ETAT ============ */
@@ -631,7 +635,7 @@ function renderPasGrid(){
     el.className = 'pas-block ' + (p.type==='Simple' ? 'type-simple' : 'type-alterne');
     el.innerHTML = `
       <div class="type-badge">${p.type}</div>
-      <div class="video-ph"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      <div class="video-ph" style="background-image:url('${p.poster}')"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
       <h4>${p.nom}</h4>
       <div class="meta">
         ${beatDots(p.temps, validated ? p.temps : 0)}
@@ -649,6 +653,7 @@ function openPasModal(id){
   state.pendingPasId = id;
   const vid = document.getElementById('modalVideo');
   vid.pause();
+  vid.poster = p.poster;
   vid.src = p.video;
   document.getElementById('modalNom').textContent = p.nom;
   document.getElementById('modalType').textContent = p.type;
