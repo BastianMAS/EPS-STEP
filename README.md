@@ -9,7 +9,13 @@ Squelette de l'application Step pour l'EPS : bibliothèque de pas, créateur de 
 - `icon-192.png` / `icon-512.png` — icônes de l'appli (placeholder à personnaliser si besoin)
 
 ## Statut
-Vidéos non encore intégrées (placeholders). Prochaine étape : recompression des 41 vidéos extraites + intégration, prévue à la rentrée.
+Les 41 vidéos sont intégrées et compressées (480p, h264, sans son, ~1,2 Mo au total pour l'ensemble — largement gérable en précache offline). Le service worker les précache automatiquement au premier chargement. Prochaine étape : ajout des nouveaux pas identifiés (voir bibliotheque_pas_step.xlsx, onglet "Pas à ajouter") à la rentrée.
+
+## Ajouter un nouveau pas plus tard
+1. Compresse la vidéo en mp4 480p (demande-moi de le faire si besoin)
+2. Place-la dans `videos/pasXX.mp4` (XX = nouvel identifiant)
+3. Ajoute une ligne dans le tableau `PAS` en haut du `<script>` d'`index.html`
+4. Ajoute le nom du fichier dans la liste `PRECACHE_URLS` de `service-worker.js`
 
 ## Mise en ligne (GitHub Pages)
 1. Crée un nouveau dépôt sur GitHub (ex. `step-eps`)

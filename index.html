@@ -182,8 +182,9 @@
   .overlay{position:fixed;inset:0;background:rgba(8,9,14,0.7);display:none;align-items:center;justify-content:center;z-index:50;}
   .overlay.active{display:flex;}
   .modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:420px;max-width:90vw;padding:28px;}
-  .modal .video-ph-lg{height:180px;border-radius:12px;background:var(--surface-raised);display:flex;align-items:center;justify-content:center;color:var(--text-muted);margin-bottom:20px;}
+  .modal .video-ph-lg{height:180px;border-radius:12px;background:var(--surface-raised);display:flex;align-items:center;justify-content:center;color:var(--text-muted);margin-bottom:20px;overflow:hidden;}
   .modal .video-ph-lg svg{width:38px;height:38px;stroke:currentColor;fill:none;stroke-width:1.4;}
+  .modal video{width:100%;height:180px;border-radius:12px;background:#000;margin-bottom:20px;object-fit:contain;}
   .modal h2{font-family:'Bebas Neue';font-size:28px;margin-bottom:6px;}
   .modal .tagrow{display:flex;gap:8px;margin-bottom:18px;}
   .tag{font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;background:var(--surface-raised);color:var(--text-muted);}
@@ -408,7 +409,7 @@
 <!-- Pas detail modal -->
 <div class="overlay" id="pasOverlay">
   <div class="modal">
-    <div class="video-ph-lg"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+    <video id="modalVideo" controls playsinline loop muted></video>
     <h2 id="modalNom">—</h2>
     <div class="tagrow">
       <span class="tag" id="modalType">—</span>
@@ -436,47 +437,47 @@
 <script>
 /* ============ DONNEES ============ */
 const PAS = [
-  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1},
-  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1},
-  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1},
-  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1},
-  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2},
-  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3},
-  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2},
-  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1},
-  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2},
-  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3},
-  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3},
-  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2},
-  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2},
-  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3},
-  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3},
-  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3},
-  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3},
-  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2},
-  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2},
-  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2},
-  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1},
-  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1},
-  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1},
-  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3},
-  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3},
-  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3},
-  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3},
-  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3},
-  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3},
-  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1},
-  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2},
-  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1},
-  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2},
-  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2},
-  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2},
-  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2},
-  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2},
-  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3},
-  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3},
-  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3},
-  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3},
+  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/pas1.mp4"},
+  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/pas2.mp4"},
+  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/pas3.mp4"},
+  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/pas4.mp4"},
+  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/pas5.mp4"},
+  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/pas6.mp4"},
+  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/pas7.mp4"},
+  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/pas8.mp4"},
+  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/pas9.mp4"},
+  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/pas10.mp4"},
+  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/pas11.mp4"},
+  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/pas12.mp4"},
+  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/pas13.mp4"},
+  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/pas14.mp4"},
+  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/pas15.mp4"},
+  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/pas16.mp4"},
+  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/pas17.mp4"},
+  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/pas18.mp4"},
+  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/pas19.mp4"},
+  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/pas20.mp4"},
+  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/pas21.mp4"},
+  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/pas22.mp4"},
+  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/pas23.mp4"},
+  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/pas24.mp4"},
+  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/pas25.mp4"},
+  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/pas26.mp4"},
+  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/pas27.mp4"},
+  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/pas28.mp4"},
+  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/pas29.mp4"},
+  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/pas30.mp4"},
+  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/pas31.mp4"},
+  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/pas32.mp4"},
+  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/pas33.mp4"},
+  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/pas34.mp4"},
+  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/pas35.mp4"},
+  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/pas36.mp4"},
+  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/pas37.mp4"},
+  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/pas38.mp4"},
+  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/pas39.mp4"},
+  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/pas40.mp4"},
+  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/pas41.mp4"},
 ];
 
 /* ============ ETAT ============ */
@@ -647,6 +648,9 @@ const pasOverlay = document.getElementById('pasOverlay');
 function openPasModal(id){
   const p = PAS.find(x=>x.id===id);
   state.pendingPasId = id;
+  const vid = document.getElementById('modalVideo');
+  vid.pause();
+  vid.src = p.video;
   document.getElementById('modalNom').textContent = p.nom;
   document.getElementById('modalType').textContent = p.type;
   document.getElementById('modalTemps').textContent = p.temps + ' temps';
@@ -657,7 +661,7 @@ function openPasModal(id){
   btn.classList.toggle('validated', validated);
   pasOverlay.classList.add('active');
 }
-document.getElementById('modalCloseBtn').addEventListener('click', ()=> pasOverlay.classList.remove('active'));
+document.getElementById('modalCloseBtn').addEventListener('click', ()=>{ pasOverlay.classList.remove('active'); document.getElementById('modalVideo').pause(); });
 document.getElementById('modalValidateBtn').addEventListener('click', async ()=>{
   if(!state.eleve){ pasOverlay.classList.remove('active'); openEleveModal(); return; }
   const id = state.pendingPasId;
