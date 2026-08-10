@@ -210,6 +210,19 @@
     background:var(--surface-raised);color:var(--text);font-size:14px;margin:8px 0 20px;font-family:'Manrope';
   }
   .theme-input:focus{outline:none;border-color:var(--lime);}
+
+  .temps-counter{margin-bottom:22px;}
+  .temps-counter-row{display:flex;align-items:baseline;gap:6px;margin-bottom:8px;}
+  .temps-value{font-size:26px;font-weight:600;color:var(--lime);transition:color .15s;}
+  .temps-target{font-size:13px;color:var(--text-muted);}
+  .temps-bar-track{height:8px;border-radius:5px;background:var(--surface-raised);overflow:hidden;margin-bottom:8px;}
+  .temps-bar-fill{height:100%;border-radius:5px;background:var(--lime);width:0%;transition:width .2s, background .2s;}
+  .temps-status{font-size:12px;color:var(--text-muted);}
+  .temps-counter.complete .temps-value{color:var(--lime);}
+  .temps-counter.complete .temps-status{color:var(--lime);font-weight:700;}
+  .temps-counter.over .temps-value{color:var(--coral);}
+  .temps-counter.over .temps-bar-fill{background:var(--coral);}
+  .temps-counter.over .temps-status{color:var(--coral);font-weight:700;}
   .bloc-list{list-style:none;min-height:60px;margin-bottom:16px;}
   .bloc-list li{
     display:flex;justify-content:space-between;align-items:center;
@@ -371,6 +384,17 @@
         <div class="builder-panel">
           <label>Thème du cycle</label>
           <input class="theme-input" id="themeInput" placeholder="Ex. Rythme &amp; énergie">
+
+          <label>Compteur de temps</label>
+          <div class="temps-counter" id="tempsCounter">
+            <div class="temps-counter-row">
+              <span class="temps-value mono" id="tempsValue">0</span>
+              <span class="temps-target mono">/ 32 temps</span>
+            </div>
+            <div class="temps-bar-track"><div class="temps-bar-fill" id="tempsBarFill"></div></div>
+            <div class="temps-status" id="tempsStatus">Ajoute des pas pour commencer ton bloc</div>
+          </div>
+
           <label>Mon bloc (<span id="blocCount">0</span> pas)</label>
           <ul class="bloc-list" id="blocList"></ul>
           <button class="btn btn-primary" id="saveChoreoBtn">Enregistrer ma chorégraphie</button>
@@ -699,18 +723,44 @@ function renderBlocList(){
   document.getElementById('blocCount').textContent = state.currentBloc.length;
   if(state.currentBloc.length===0){
     list.innerHTML = '<div class="bloc-empty">Ajoute des pas depuis la liste à gauche</div>';
+    updateTempsCounter();
     return;
   }
   list.innerHTML = '';
   state.currentBloc.forEach((p,i)=>{
     const li = document.createElement('li');
-    li.innerHTML = `<span>${i+1}. ${p.nom}</span>`;
+    li.innerHTML = `<span>${i+1}. ${p.nom} <span style="color:var(--text-muted);font-weight:600;">· ${p.temps}t</span></span>`;
     const btn = document.createElement('button');
     btn.textContent = '✕';
     btn.addEventListener('click', ()=>{ state.currentBloc.splice(i,1); renderBlocList(); });
     li.appendChild(btn);
     list.appendChild(li);
   });
+  updateTempsCounter();
+}
+function updateTempsCounter(){
+  const TARGET = 32;
+  const total = state.currentBloc.reduce((sum,p)=> sum + p.temps, 0);
+  const wrap = document.getElementById('tempsCounter');
+  const valueEl = document.getElementById('tempsValue');
+  const fillEl = document.getElementById('tempsBarFill');
+  const statusEl = document.getElementById('tempsStatus');
+
+  valueEl.textContent = total;
+  fillEl.style.width = Math.min((total / TARGET) * 100, 100) + '%';
+  wrap.classList.remove('complete','over');
+
+  if(total === TARGET){
+    wrap.classList.add('complete');
+    statusEl.textContent = '✓ Bloc complet à 32 temps';
+  } else if(total > TARGET){
+    wrap.classList.add('over');
+    statusEl.textContent = `${total - TARGET} temps de trop — retire un pas`;
+  } else if(total === 0){
+    statusEl.textContent = 'Ajoute des pas pour commencer ton bloc';
+  } else {
+    statusEl.textContent = `Encore ${TARGET - total} temps pour compléter le bloc`;
+  }
 }
 document.getElementById('saveChoreoBtn').addEventListener('click', async ()=>{
   if(!state.eleve){ openEleveModal(); return; }
