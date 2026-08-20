@@ -173,6 +173,31 @@
   .modal video{width:100%;height:180px;border-radius:12px;background:#000;margin-bottom:20px;object-fit:contain;}
   .modal h2{font-family:'Bebas Neue';font-size:28px;margin-bottom:6px;}
   .modal .tagrow{display:flex;gap:8px;margin-bottom:18px;}
+  .tip-box{
+    background:rgba(212,255,63,0.08);
+    border:1px solid rgba(212,255,63,0.3);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+    color:var(--text);
+    margin-bottom:18px;
+    line-height:1.4;
+  }
+
+  /* ---------- Règles & Sécurité ---------- */
+  .regle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
+  .regle-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;}
+  .regle-icon{font-size:26px;margin-bottom:10px;}
+  .regle-card h3{font-family:'Bebas Neue';font-size:22px;letter-spacing:0.02em;margin-bottom:14px;}
+  .regle-card ul{list-style:none;display:flex;flex-direction:column;gap:11px;}
+  .regle-card li{
+    font-size:13px;color:var(--text-muted);line-height:1.45;
+    padding-left:18px;position:relative;
+  }
+  .regle-card li::before{
+    content:'';position:absolute;left:0;top:6px;
+    width:6px;height:6px;border-radius:50%;background:var(--lime);
+  }
   .tag{font-size:11px;font-weight:700;padding:5px 10px;border-radius:7px;background:var(--surface-raised);color:var(--text-muted);}
   .btn{
     border:none;border-radius:10px;padding:12px 20px;font-weight:800;font-size:13.5px;cursor:pointer;
@@ -262,6 +287,10 @@
       <svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
       Mes chorés
     </button>
+    <button class="navbtn" data-screen="regles">
+      <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
+      Règles
+    </button>
   </div>
 
   <div class="main">
@@ -274,7 +303,7 @@
         <p>Cherche un pas dans la bibliothèque et construis tes blocs chorégraphiques.</p>
       </div>
 
-      <div class="menu-grid" style="grid-template-columns:repeat(3,1fr);max-width:820px;">
+      <div class="menu-grid" style="grid-template-columns:repeat(4,1fr);max-width:1040px;">
         <div class="menu-tile" data-screen="bibliotheque">
           <div class="num">01</div>
           <div>
@@ -299,9 +328,17 @@
             <p>Groupe, classe et thème de chaque création enregistrée</p>
           </div>
         </div>
+        <div class="menu-tile" data-screen="regles">
+          <div class="num">04</div>
+          <div>
+            <div class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg></div>
+            <h3>Règles &amp; Sécurité</h3>
+            <p>Placement, distance et consignes de sécurité</p>
+          </div>
+        </div>
       </div>
 
-      <div class="home-stats" style="max-width:820px;">
+      <div class="home-stats" style="max-width:1040px;">
         <div class="stat-card"><div class="val mono" id="statTotal">41</div><div class="lbl">pas dans la bibliothèque</div></div>
         <div class="stat-card" data-screen="choregraphies" style="cursor:pointer;"><div class="val mono" id="statChoreos">0</div><div class="lbl">chorégraphies enregistrées →</div></div>
       </div>
@@ -389,6 +426,50 @@
       <div id="choreoListWrap"></div>
     </section>
 
+    <!-- REGLES & SECURITE -->
+    <section class="screen" id="screen-regles">
+      <div class="topbar">
+        <button class="backbtn" data-screen="home">←</button>
+        <div class="screen-title">Règles &amp; Sécurité</div>
+      </div>
+      <div class="screen-sub">À lire avant de commencer le cycle step.</div>
+
+      <div class="regle-grid">
+        <div class="regle-card">
+          <div class="regle-icon">🛡️</div>
+          <h3>Sécurité</h3>
+          <ul>
+            <li>Chaussures de sport fermées obligatoires, jamais pieds nus ou en chaussettes</li>
+            <li>Vérifie que le step est bien à plat et stable avant de commencer</li>
+            <li>Pose le pied entièrement sur le step, jamais juste la pointe ou le talon dans le vide</li>
+            <li>Genoux légèrement fléchis à la réception, jamais verrouillés</li>
+            <li>Descends toujours près du step, ne saute jamais loin en arrière</li>
+            <li>Garde le dos droit et le gainage engagé, surtout sur les pas avec impulsion</li>
+          </ul>
+        </div>
+        <div class="regle-card">
+          <div class="regle-icon">📍</div>
+          <h3>Placement</h3>
+          <ul>
+            <li>Un step par élève ou par binôme, jamais partagé en même temps</li>
+            <li>Steps disposés en quinconce pour que chacun voie le prof ou la vidéo</li>
+            <li>Regarde le step uniquement au début d'un nouveau pas, puis relève les yeux</li>
+            <li>Reste face à ton step pendant les pas simples ; les pas comme "traverse" ou "à cheval" ont besoin d'espace libre autour</li>
+          </ul>
+        </div>
+        <div class="regle-card">
+          <div class="regle-icon">📏</div>
+          <h3>Distance</h3>
+          <ul>
+            <li>Au moins 1 mètre entre chaque step, dans toutes les directions</li>
+            <li>1,5 mètre si la salle le permet, surtout pour les groupes qui débutent</li>
+            <li>Laisse de l'espace à l'avant du step pour les pas qui se déplacent (revolving, traverse, over the top)</li>
+            <li>Aucun sac, chaise ou matériel autour du step — la zone doit rester dégagée</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
   </div>
 </div>
 
@@ -402,6 +483,7 @@
       <span class="tag" id="modalTemps">—</span>
       <span class="tag" id="modalNiveau">—</span>
     </div>
+    <div class="tip-box" id="modalTip">💡 —</div>
     <button class="btn btn-ghost" id="modalCloseBtn" style="margin-top:0;">Fermer</button>
   </div>
 </div>
@@ -409,47 +491,47 @@
 <script>
 /* ============ DONNEES ============ */
 const PAS = [
-  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4",poster:"posters/01_Basic.jpg"},
-  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4",poster:"posters/02_Jog.jpg"},
-  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4",poster:"posters/03_Pendulum.jpg"},
-  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4",poster:"posters/04_V_Step.jpg"},
-  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4",poster:"posters/05_V_step_saute.jpg"},
-  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4",poster:"posters/06_V_step_bloque.jpg"},
-  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4",poster:"posters/07_Reverse_turn.jpg"},
-  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4",poster:"posters/08_Across.jpg"},
-  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4",poster:"posters/09_Across_chasse.jpg"},
-  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4",poster:"posters/10_Revolving_door.jpg"},
-  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4",poster:"posters/11_Revolving_chasse.jpg"},
-  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4",poster:"posters/12_Basic_Cheval.jpg"},
-  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4",poster:"posters/13_Cheval_chasse.jpg"},
-  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4",poster:"posters/14_Genou_cheval.jpg"},
-  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4",poster:"posters/15_Dobble_lunge_side.jpg"},
-  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4",poster:"posters/16_T_step.jpg"},
-  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4",poster:"posters/17_Lunge_side_demi_tour.jpg"},
-  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4",poster:"posters/18_Jazz_square.jpg"},
-  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4",poster:"posters/19_Box_step.jpg"},
-  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4",poster:"posters/20_Pivot_turn.jpg"},
-  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4",poster:"posters/21_Tap_up.jpg"},
-  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4",poster:"posters/22_Pony.jpg"},
-  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4",poster:"posters/23_Genou_simple.jpg"},
-  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4",poster:"posters/24_3_Genoux_repeat.jpg"},
-  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4",poster:"posters/25_Knee_up_twist.jpg"},
-  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4",poster:"posters/26_Knee_up_ciseaux.jpg"},
-  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4",poster:"posters/27_Genou_L.jpg"},
-  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4",poster:"posters/28_Genou_L_tape_derriere.jpg"},
-  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4",poster:"posters/29_Genou_L_touche_step.jpg"},
-  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4",poster:"posters/30_Kick_simple.jpg"},
-  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4",poster:"posters/31_Kick_impulsion.jpg"},
-  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4",poster:"posters/32_Heel_up_simple.jpg"},
-  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4",poster:"posters/33_Heel_up_impulsion.jpg"},
-  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4",poster:"posters/34_Back_lift_simple.jpg"},
-  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4",poster:"posters/35_Side_lift_simple.jpg"},
-  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4",poster:"posters/36_Lunge_side.jpg"},
-  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4",poster:"posters/37_Mambo_chasse.jpg"},
-  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4",poster:"posters/38_Kick_repeat.jpg"},
-  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4",poster:"posters/39_Heel_up_repeat.jpg"},
-  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4",poster:"posters/40_Back_lift_repeat.jpg"},
-  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4",poster:"posters/41_Side_lift_repeat.jpg"},
+  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4",poster:"posters/01_Basic.jpg",tip:"Pose tout le pied à plat sur le step, jamais juste la pointe."},
+  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4",poster:"posters/02_Jog.jpg",tip:"Genoux légèrement fléchis, ça amortit et ça protège les articulations."},
+  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4",poster:"posters/03_Pendulum.jpg",tip:"Le balancer part de la hanche, pas juste de la jambe."},
+  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4",poster:"posters/04_V_Step.jpg",tip:"Ouvre bien le V avec les pieds pour un meilleur équilibre."},
+  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4",poster:"posters/05_V_step_saute.jpg",tip:"Reste léger à la réception, pas de bruit sourd en retombant."},
+  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4",poster:"posters/06_V_step_bloque.jpg",tip:"Marque bien le temps d'arrêt, c'est ce qui donne le style au pas."},
+  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4",poster:"posters/07_Reverse_turn.jpg",tip:"Garde un point fixe des yeux pour ne pas perdre l'équilibre en tournant."},
+  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4",poster:"posters/08_Across.jpg",tip:"Regarde où tu poses le pied la première fois, ensuite fais confiance à tes appuis."},
+  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4",poster:"posters/09_Across_chasse.jpg",tip:"Le chassé doit rester fluide, pas de saut brusque."},
+  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4",poster:"posters/10_Revolving_door.jpg",tip:"Anticipe le tour avec les épaules avant les pieds."},
+  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4",poster:"posters/11_Revolving_chasse.jpg",tip:"Enchaîne le chassé sans casser le rythme du tour."},
+  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4",poster:"posters/12_Basic_Cheval.jpg",tip:"Imagine que tu descends de cheval : souple et équilibré."},
+  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4",poster:"posters/13_Cheval_chasse.jpg",tip:"Garde le buste stable pendant le chassé, seules les jambes bougent."},
+  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4",poster:"posters/14_Genou_cheval.jpg",tip:"Le genou monte franc, pas juste un petit coup de pied."},
+  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4",poster:"posters/15_Dobble_lunge_side.jpg",tip:"Contrôle la fente, ne laisse pas le genou dépasser la pointe de pied."},
+  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4",poster:"posters/16_T_step.jpg",tip:"Dessine bien la forme du T avec tes appuis au sol."},
+  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4",poster:"posters/17_Lunge_side_demi_tour.jpg",tip:"Prends ton temps sur le demi-tour, la vitesse viendra avec la pratique."},
+  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4",poster:"posters/18_Jazz_square.jpg",tip:"Les 4 appuis du jazz square doivent être nets et bien placés."},
+  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4",poster:"posters/19_Box_step.jpg",tip:"Garde les hanches face à toi tout au long du box step."},
+  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4",poster:"posters/20_Pivot_turn.jpg",tip:"Pivote sur la plante du pied, pas sur le talon."},
+  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4",poster:"posters/21_Tap_up.jpg",tip:"Petit et vif, le tap up se fait du bout du pied."},
+  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4",poster:"posters/22_Pony.jpg",tip:"Reste souple dans les chevilles, le pony rebondit léger."},
+  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4",poster:"posters/23_Genou_simple.jpg",tip:"Monte le genou sans creuser le dos."},
+  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4",poster:"posters/24_3_Genoux_repeat.jpg",tip:"Garde le même tempo sur les 3 répétitions, ne accélère pas à la fin."},
+  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4",poster:"posters/25_Knee_up_twist.jpg",tip:"Le buste reste droit même quand la jambe tourne."},
+  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4",poster:"posters/26_Knee_up_ciseaux.jpg",tip:"Les ciseaux doivent rester contrôlés, pas de à-coups."},
+  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4",poster:"posters/27_Genou_L.jpg",tip:"Trace bien la forme du L avec ta jambe libre."},
+  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4",poster:"posters/28_Genou_L_tape_derriere.jpg",tip:"Sens la tape derrière comme un rebond léger, pas un coup."},
+  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4",poster:"posters/29_Genou_L_touche_step.jpg",tip:"Touche le step avec précision avant de reposer le pied au sol."},
+  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4",poster:"posters/30_Kick_simple.jpg",tip:"Le kick part de la hanche, la jambe reste tonique mais pas raide."},
+  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4",poster:"posters/31_Kick_impulsion.jpg",tip:"L'impulsion vient des mollets, reste léger sur l'appui."},
+  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4",poster:"posters/32_Heel_up_simple.jpg",tip:"Le talon vient taper vers la fesse, pas juste plier le genou."},
+  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4",poster:"posters/33_Heel_up_impulsion.jpg",tip:"Garde le dos droit même en accélérant le talon-fesse."},
+  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4",poster:"posters/34_Back_lift_simple.jpg",tip:"Le regard reste devant, pas besoin de vérifier la jambe qui part en arrière."},
+  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4",poster:"posters/35_Side_lift_simple.jpg",tip:"Garde les hanches stables, seule la jambe part sur le côté."},
+  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4",poster:"posters/36_Lunge_side.jpg",tip:"Fléchis bien le genou d'appui pour absorber le mouvement."},
+  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4",poster:"posters/37_Mambo_chasse.jpg",tip:"Le mambo se danse : laisse le buste suivre légèrement le rythme."},
+  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4",poster:"posters/38_Kick_repeat.jpg",tip:"Chaque répétition doit être aussi nette que la première."},
+  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4",poster:"posters/39_Heel_up_repeat.jpg",tip:"Garde le même tempo du début à la fin de la série."},
+  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4",poster:"posters/40_Back_lift_repeat.jpg",tip:"Reste gainé pour ne pas te déséquilibrer vers l'avant."},
+  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4",poster:"posters/41_Side_lift_repeat.jpg",tip:"Contrôle la vitesse, mieux vaut un mouvement propre que rapide."},
 ];
 
 /* ============ ETAT ============ */
@@ -560,6 +642,7 @@ function openPasModal(id){
   document.getElementById('modalType').textContent = p.type;
   document.getElementById('modalTemps').textContent = p.temps + ' temps';
   document.getElementById('modalNiveau').textContent = '⭐'.repeat(p.niveau);
+  document.getElementById('modalTip').textContent = '💡 ' + (p.tip || 'Concentre-toi sur la qualité du mouvement plutôt que la vitesse.');
   pasOverlay.classList.add('active');
 }
 document.getElementById('modalCloseBtn').addEventListener('click', ()=>{ pasOverlay.classList.remove('active'); document.getElementById('modalVideo').pause(); });
