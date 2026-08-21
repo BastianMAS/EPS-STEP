@@ -75,6 +75,17 @@
   .navbtn.active{background:var(--surface-raised);color:var(--lime);}
   .navbtn.active svg{stroke:var(--lime);}
 
+  .creator-signature{
+    margin-top:auto;
+    padding-top:16px;
+    opacity:0.35;
+    transition:opacity .2s;
+    display:flex;
+    justify-content:center;
+  }
+  .creator-signature:hover{opacity:0.8;}
+  .creator-signature img{width:44px;height:auto;display:block;}
+
   /* ---------- Main content ---------- */
   .main{flex:1;overflow-y:auto;position:relative;}
   .screen{display:none;padding:36px 44px 60px;min-height:100%;}
@@ -318,6 +329,9 @@
       <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"/></svg>
       Règles
     </button>
+    <div class="creator-signature">
+      <img src="signature-logo.png" alt="Créé par Bastian Mas, Professeur d'EPS">
+    </div>
   </div>
 
   <div class="main">

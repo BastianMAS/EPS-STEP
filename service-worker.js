@@ -1,4 +1,4 @@
-const CACHE_NAME = "step-eps-v8";
+const CACHE_NAME = "step-eps-v9";
 const PRECACHE_URLS = [
   "./",
   "./index.html",
@@ -7,6 +7,7 @@ const PRECACHE_URLS = [
   "./icon-192.png",
   "./icon-512.png",
   "./logo-sidebar.png",
+  "./signature-logo.png",
   "./videos/01_Basic.mp4",
   "./videos/02_Jog.mp4",
   "./videos/03_Pendulum.mp4",
