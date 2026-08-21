@@ -95,7 +95,7 @@
   .home-hero h1{font-family:'Bebas Neue';font-size:64px;line-height:0.95;letter-spacing:0.01em;}
   .home-hero p{color:var(--text-muted);margin-top:12px;font-size:14.5px;max-width:520px;}
 
-  .menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;}
   .menu-tile{
     background:linear-gradient(180deg,var(--surface-raised),var(--surface));
     border:1px solid var(--border);
@@ -112,7 +112,7 @@
   .menu-tile .num{font-family:'JetBrains Mono';font-size:11px;color:var(--text-muted);}
   .menu-tile .icon-wrap{width:40px;height:40px;border-radius:10px;background:rgba(212,255,63,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
   .menu-tile .icon-wrap svg{width:20px;height:20px;stroke:var(--lime);fill:none;stroke-width:2;}
-  .menu-tile h3{font-family:'Bebas Neue';font-size:22px;letter-spacing:0.02em;margin-bottom:4px;}
+  .menu-tile h3{font-family:'Bebas Neue';font-size:19px;letter-spacing:0.01em;margin-bottom:4px;line-height:1.05;overflow-wrap:break-word;}
   .menu-tile p{font-size:12px;color:var(--text-muted);}
 
   .home-stats{display:flex;gap:14px;margin-top:36px;}
@@ -180,6 +180,16 @@
     padding:12px 14px;
     font-size:13px;
     color:var(--text);
+    margin-bottom:10px;
+    line-height:1.4;
+  }
+  .interet-box{
+    background:rgba(255,107,122,0.08);
+    border:1px solid rgba(255,107,122,0.3);
+    border-radius:10px;
+    padding:12px 14px;
+    font-size:13px;
+    color:var(--text);
     margin-bottom:18px;
     line-height:1.4;
   }
@@ -215,6 +225,14 @@
     background:var(--surface);color:var(--text);font-size:14px;margin-bottom:14px;font-family:'Manrope';
   }
   .search-input:focus{outline:none;border-color:var(--lime);}
+
+  .choreo-io-row{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap;}
+  .btn-io{
+    padding:10px 16px;border-radius:9px;border:1px solid var(--border);
+    background:var(--surface);color:var(--text);font-size:12.5px;font-weight:700;
+    cursor:pointer;font-family:'Manrope';
+  }
+  .btn-io:hover{border-color:var(--lime);color:var(--lime);}
   .builder-lib{max-height:60vh;overflow-y:auto;padding-right:6px;}
   .builder-panel{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;height:fit-content;position:sticky;top:0;}
   .builder-panel label{font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;}
@@ -244,6 +262,7 @@
   .bloc-list li button{background:none;border:none;color:var(--coral);cursor:pointer;font-weight:800;font-size:15px;}
   .bloc-empty{color:var(--text-muted);font-size:12.5px;text-align:center;padding:20px 0;}
   .add-mini{width:26px;height:26px;border-radius:7px;background:var(--lime);color:#12141C;border:none;font-weight:800;cursor:pointer;flex-shrink:0;}
+  .play-mini{width:26px;height:26px;border-radius:7px;background:var(--surface-raised);color:var(--text);border:1px solid var(--border);cursor:pointer;flex-shrink:0;font-size:10px;display:flex;align-items:center;justify-content:center;}
   .pas-mini{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 12px;margin-bottom:8px;font-size:13px;}
 
   /* ---------- Chorégraphies enregistrées ---------- */
@@ -303,7 +322,7 @@
         <p>Cherche un pas dans la bibliothèque et construis tes blocs chorégraphiques.</p>
       </div>
 
-      <div class="menu-grid" style="grid-template-columns:repeat(4,1fr);max-width:1040px;">
+      <div class="menu-grid" style="max-width:1040px;">
         <div class="menu-tile" data-screen="bibliotheque">
           <div class="num">01</div>
           <div>
@@ -352,7 +371,9 @@
           <div class="screen-title">Bibliothèque de pas</div>
         </div>
       </div>
-      <div class="screen-sub">Clique sur un pas pour voir le détail et le marquer comme validé.</div>
+      <div class="screen-sub">Cherche, filtre par type ou niveau, clique sur un pas pour voir la vidéo.</div>
+
+      <input class="search-input" id="bibliothequeSearch" placeholder="🔍 Chercher un pas..." style="max-width:400px;">
 
       <div class="filters" id="typeFilters">
         <div class="chip active" data-filter-type="all">Tous</div>
@@ -391,13 +412,13 @@
           <div id="editingBanner" style="display:none;background:var(--surface-raised);border:1px solid var(--lime);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--lime);font-weight:700;margin-bottom:14px;">✎ Modification d'une chorégraphie existante</div>
 
           <label>Thème</label>
-          <input class="theme-input" id="themeInput" placeholder="Ex. Rythme &amp; énergie">
+          <input class="theme-input" id="themeInput" placeholder="Ex. Rythme &amp; énergie" oninput="saveDraft()">
 
           <label>Groupe (élèves)</label>
-          <input class="theme-input" id="groupeInput" placeholder="Ex. Lina, Sofia, Emma">
+          <input class="theme-input" id="groupeInput" placeholder="Ex. Lina, Sofia, Emma" oninput="saveDraft()">
 
           <label>Classe</label>
-          <input class="theme-input" id="classeInput" placeholder="Ex. 4°B">
+          <input class="theme-input" id="classeInput" placeholder="Ex. 4°B" oninput="saveDraft()">
 
           <label>Compteur de temps</label>
           <div class="temps-counter" id="tempsCounter">
@@ -423,6 +444,11 @@
         <div class="screen-title">Mes chorégraphies</div>
       </div>
       <div class="screen-sub">Toutes les créations enregistrées sur cette tablette.</div>
+      <div class="choreo-io-row">
+        <button class="btn-io" id="exportChoreoBtn">⬇ Exporter (sauvegarde)</button>
+        <button class="btn-io" id="importChoreoBtn">⬆ Importer une sauvegarde</button>
+        <input type="file" id="importChoreoFile" accept=".json" style="display:none;">
+      </div>
       <div id="choreoListWrap"></div>
     </section>
 
@@ -484,6 +510,7 @@
       <span class="tag" id="modalNiveau">—</span>
     </div>
     <div class="tip-box" id="modalTip">💡 —</div>
+    <div class="interet-box" id="modalInteret">🎯 —</div>
     <button class="btn btn-ghost" id="modalCloseBtn" style="margin-top:0;">Fermer</button>
   </div>
 </div>
@@ -491,47 +518,47 @@
 <script>
 /* ============ DONNEES ============ */
 const PAS = [
-  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4",poster:"posters/01_Basic.jpg",tip:"Pose tout le pied à plat sur le step, jamais juste la pointe."},
-  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4",poster:"posters/02_Jog.jpg",tip:"Genoux légèrement fléchis, ça amortit et ça protège les articulations."},
-  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4",poster:"posters/03_Pendulum.jpg",tip:"Le balancer part de la hanche, pas juste de la jambe."},
-  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4",poster:"posters/04_V_Step.jpg",tip:"Ouvre bien le V avec les pieds pour un meilleur équilibre."},
-  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4",poster:"posters/05_V_step_saute.jpg",tip:"Reste léger à la réception, pas de bruit sourd en retombant."},
-  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4",poster:"posters/06_V_step_bloque.jpg",tip:"Marque bien le temps d'arrêt, c'est ce qui donne le style au pas."},
-  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4",poster:"posters/07_Reverse_turn.jpg",tip:"Garde un point fixe des yeux pour ne pas perdre l'équilibre en tournant."},
-  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4",poster:"posters/08_Across.jpg",tip:"Regarde où tu poses le pied la première fois, ensuite fais confiance à tes appuis."},
-  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4",poster:"posters/09_Across_chasse.jpg",tip:"Le chassé doit rester fluide, pas de saut brusque."},
-  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4",poster:"posters/10_Revolving_door.jpg",tip:"Anticipe le tour avec les épaules avant les pieds."},
-  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4",poster:"posters/11_Revolving_chasse.jpg",tip:"Enchaîne le chassé sans casser le rythme du tour."},
-  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4",poster:"posters/12_Basic_Cheval.jpg",tip:"Imagine que tu descends de cheval : souple et équilibré."},
-  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4",poster:"posters/13_Cheval_chasse.jpg",tip:"Garde le buste stable pendant le chassé, seules les jambes bougent."},
-  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4",poster:"posters/14_Genou_cheval.jpg",tip:"Le genou monte franc, pas juste un petit coup de pied."},
-  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4",poster:"posters/15_Dobble_lunge_side.jpg",tip:"Contrôle la fente, ne laisse pas le genou dépasser la pointe de pied."},
-  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4",poster:"posters/16_T_step.jpg",tip:"Dessine bien la forme du T avec tes appuis au sol."},
-  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4",poster:"posters/17_Lunge_side_demi_tour.jpg",tip:"Prends ton temps sur le demi-tour, la vitesse viendra avec la pratique."},
-  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4",poster:"posters/18_Jazz_square.jpg",tip:"Les 4 appuis du jazz square doivent être nets et bien placés."},
-  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4",poster:"posters/19_Box_step.jpg",tip:"Garde les hanches face à toi tout au long du box step."},
-  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4",poster:"posters/20_Pivot_turn.jpg",tip:"Pivote sur la plante du pied, pas sur le talon."},
-  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4",poster:"posters/21_Tap_up.jpg",tip:"Petit et vif, le tap up se fait du bout du pied."},
-  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4",poster:"posters/22_Pony.jpg",tip:"Reste souple dans les chevilles, le pony rebondit léger."},
-  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4",poster:"posters/23_Genou_simple.jpg",tip:"Monte le genou sans creuser le dos."},
-  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4",poster:"posters/24_3_Genoux_repeat.jpg",tip:"Garde le même tempo sur les 3 répétitions, ne accélère pas à la fin."},
-  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4",poster:"posters/25_Knee_up_twist.jpg",tip:"Le buste reste droit même quand la jambe tourne."},
-  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4",poster:"posters/26_Knee_up_ciseaux.jpg",tip:"Les ciseaux doivent rester contrôlés, pas de à-coups."},
-  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4",poster:"posters/27_Genou_L.jpg",tip:"Trace bien la forme du L avec ta jambe libre."},
-  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4",poster:"posters/28_Genou_L_tape_derriere.jpg",tip:"Sens la tape derrière comme un rebond léger, pas un coup."},
-  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4",poster:"posters/29_Genou_L_touche_step.jpg",tip:"Touche le step avec précision avant de reposer le pied au sol."},
-  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4",poster:"posters/30_Kick_simple.jpg",tip:"Le kick part de la hanche, la jambe reste tonique mais pas raide."},
-  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4",poster:"posters/31_Kick_impulsion.jpg",tip:"L'impulsion vient des mollets, reste léger sur l'appui."},
-  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4",poster:"posters/32_Heel_up_simple.jpg",tip:"Le talon vient taper vers la fesse, pas juste plier le genou."},
-  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4",poster:"posters/33_Heel_up_impulsion.jpg",tip:"Garde le dos droit même en accélérant le talon-fesse."},
-  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4",poster:"posters/34_Back_lift_simple.jpg",tip:"Le regard reste devant, pas besoin de vérifier la jambe qui part en arrière."},
-  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4",poster:"posters/35_Side_lift_simple.jpg",tip:"Garde les hanches stables, seule la jambe part sur le côté."},
-  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4",poster:"posters/36_Lunge_side.jpg",tip:"Fléchis bien le genou d'appui pour absorber le mouvement."},
-  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4",poster:"posters/37_Mambo_chasse.jpg",tip:"Le mambo se danse : laisse le buste suivre légèrement le rythme."},
-  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4",poster:"posters/38_Kick_repeat.jpg",tip:"Chaque répétition doit être aussi nette que la première."},
-  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4",poster:"posters/39_Heel_up_repeat.jpg",tip:"Garde le même tempo du début à la fin de la série."},
-  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4",poster:"posters/40_Back_lift_repeat.jpg",tip:"Reste gainé pour ne pas te déséquilibrer vers l'avant."},
-  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4",poster:"posters/41_Side_lift_repeat.jpg",tip:"Contrôle la vitesse, mieux vaut un mouvement propre que rapide."},
+  {id:1,nom:"Basic",type:"Simple",temps:4,niveau:1,video:"videos/01_Basic.mp4",poster:"posters/01_Basic.jpg",tip:"Pose tout le pied à plat sur le step, jamais juste la pointe.",interet:"Pas fondamental : base de tout enchaînement, travaille le placement et le rythme."},
+  {id:2,nom:"Jog",type:"Simple",temps:4,niveau:1,video:"videos/02_Jog.mp4",poster:"posters/02_Jog.jpg",tip:"Genoux légèrement fléchis, ça amortit et ça protège les articulations.",interet:"Échauffement cardio léger, prépare le corps à monter en intensité."},
+  {id:3,nom:"Pendulum",type:"Simple",temps:4,niveau:1,video:"videos/03_Pendulum.mp4",poster:"posters/03_Pendulum.jpg",tip:"Le balancer part de la hanche, pas juste de la jambe.",interet:"Développe le contrôle de l'équilibre sur un appui unique."},
+  {id:4,nom:"V Step",type:"Simple",temps:4,niveau:1,video:"videos/04_V_Step.mp4",poster:"posters/04_V_Step.jpg",tip:"Ouvre bien le V avec les pieds pour un meilleur équilibre.",interet:"Travaille l'ouverture de hanche et la coordination des deux jambes."},
+  {id:5,nom:"V step sauté",type:"Simple",temps:4,niveau:2,video:"videos/05_V_step_saute.mp4",poster:"posters/05_V_step_saute.jpg",tip:"Reste léger à la réception, pas de bruit sourd en retombant.",interet:"Ajoute une composante d'impulsion, bon pour le cardio."},
+  {id:6,nom:"V step bloqué",type:"Simple",temps:8,niveau:3,video:"videos/06_V_step_bloque.mp4",poster:"posters/06_V_step_bloque.jpg",tip:"Marque bien le temps d'arrêt, c'est ce qui donne le style au pas.",interet:"Renforce le contrôle du tempo et la maîtrise du temps suspendu."},
+  {id:7,nom:"Reverse turn",type:"Simple",temps:4,niveau:2,video:"videos/07_Reverse_turn.mp4",poster:"posters/07_Reverse_turn.jpg",tip:"Garde un point fixe des yeux pour ne pas perdre l'équilibre en tournant.",interet:"Développe l'équilibre et l'orientation dans l'espace."},
+  {id:8,nom:"Across",type:"Simple",temps:4,niveau:1,video:"videos/08_Across.mp4",poster:"posters/08_Across.jpg",tip:"Regarde où tu poses le pied la première fois, ensuite fais confiance à tes appuis.",interet:"Introduit le déplacement latéral, utile pour la coordination globale."},
+  {id:9,nom:"Across chassé",type:"Simple",temps:4,niveau:2,video:"videos/09_Across_chasse.mp4",poster:"posters/09_Across_chasse.jpg",tip:"Le chassé doit rester fluide, pas de saut brusque.",interet:"Enchaîne déplacement et rythme, bon pour la fluidité."},
+  {id:10,nom:"Revolving door",type:"Simple",temps:8,niveau:3,video:"videos/10_Revolving_door.mp4",poster:"posters/10_Revolving_door.jpg",tip:"Anticipe le tour avec les épaules avant les pieds.",interet:"Travaille la rotation complète du corps sans perdre l'équilibre."},
+  {id:11,nom:"Revolving chassé",type:"Simple",temps:8,niveau:3,video:"videos/11_Revolving_chasse.mp4",poster:"posters/11_Revolving_chasse.jpg",tip:"Enchaîne le chassé sans casser le rythme du tour.",interet:"Combine rotation et rythme, exigeant en coordination."},
+  {id:12,nom:"Basic Cheval",type:"Simple",temps:4,niveau:2,video:"videos/12_Basic_Cheval.mp4",poster:"posters/12_Basic_Cheval.jpg",tip:"Imagine que tu descends de cheval : souple et équilibré.",interet:"Développe la mobilité de hanche et la stabilité du bassin."},
+  {id:13,nom:"Cheval chassé",type:"Simple",temps:4,niveau:2,video:"videos/13_Cheval_chasse.mp4",poster:"posters/13_Cheval_chasse.jpg",tip:"Garde le buste stable pendant le chassé, seules les jambes bougent.",interet:"Ajoute du rythme à un mouvement de hanche, bon pour le style."},
+  {id:14,nom:"Genou cheval",type:"Simple",temps:8,niveau:3,video:"videos/14_Genou_cheval.mp4",poster:"posters/14_Genou_cheval.jpg",tip:"Le genou monte franc, pas juste un petit coup de pied.",interet:"Renforce les quadriceps et la coordination genou-hanche."},
+  {id:15,nom:"Dobble lunge side",type:"Simple",temps:8,niveau:3,video:"videos/15_Dobble_lunge_side.mp4",poster:"posters/15_Dobble_lunge_side.jpg",tip:"Contrôle la fente, ne laisse pas le genou dépasser la pointe de pied.",interet:"Travaille la force des jambes et le contrôle de la fente."},
+  {id:16,nom:"T step",type:"Simple",temps:8,niveau:3,video:"videos/16_T_step.mp4",poster:"posters/16_T_step.jpg",tip:"Dessine bien la forme du T avec tes appuis au sol.",interet:"Développe la précision des appuis et le placement spatial."},
+  {id:17,nom:"Lunge side demi tour",type:"Simple",temps:8,niveau:3,video:"videos/17_Lunge_side_demi_tour.mp4",poster:"posters/17_Lunge_side_demi_tour.jpg",tip:"Prends ton temps sur le demi-tour, la vitesse viendra avec la pratique.",interet:"Combine équilibre et rotation, bon exercice de coordination avancée."},
+  {id:18,nom:"Jazz square",type:"Simple",temps:4,niveau:2,video:"videos/18_Jazz_square.mp4",poster:"posters/18_Jazz_square.jpg",tip:"Les 4 appuis du jazz square doivent être nets et bien placés.",interet:"Travaille la précision des 4 appuis et la mémorisation d'enchaînement."},
+  {id:19,nom:"Box step",type:"Simple",temps:4,niveau:2,video:"videos/19_Box_step.mp4",poster:"posters/19_Box_step.jpg",tip:"Garde les hanches face à toi tout au long du box step.",interet:"Renforce la stabilité du buste pendant un déplacement complexe."},
+  {id:20,nom:"Pivot turn",type:"Simple",temps:4,niveau:2,video:"videos/20_Pivot_turn.mp4",poster:"posters/20_Pivot_turn.jpg",tip:"Pivote sur la plante du pied, pas sur le talon.",interet:"Développe l'équilibre sur un pivot, utile pour les transitions."},
+  {id:21,nom:"Tap up",type:"Alterné",temps:4,niveau:1,video:"videos/21_Tap_up.mp4",poster:"posters/21_Tap_up.jpg",tip:"Petit et vif, le tap up se fait du bout du pied.",interet:"Cardio léger et rapide, bon pour l'échauffement des chevilles."},
+  {id:22,nom:"Pony",type:"Alterné",temps:4,niveau:1,video:"videos/22_Pony.mp4",poster:"posters/22_Pony.jpg",tip:"Reste souple dans les chevilles, le pony rebondit léger.",interet:"Travaille la légèreté et le rebond, sollicite les mollets."},
+  {id:23,nom:"Genou simple",type:"Alterné",temps:4,niveau:1,video:"videos/23_Genou_simple.mp4",poster:"posters/23_Genou_simple.jpg",tip:"Monte le genou sans creuser le dos.",interet:"Renforce le fléchisseur de hanche, base de nombreux pas alternés."},
+  {id:24,nom:"3 Genoux (repeat)",type:"Alterné",temps:8,niveau:3,video:"videos/24_3_Genoux_repeat.mp4",poster:"posters/24_3_Genoux_repeat.jpg",tip:"Garde le même tempo sur les 3 répétitions, ne accélère pas à la fin.",interet:"Travaille l'endurance musculaire par la répétition contrôlée."},
+  {id:25,nom:"Knee up twist",type:"Alterné",temps:8,niveau:3,video:"videos/25_Knee_up_twist.mp4",poster:"posters/25_Knee_up_twist.jpg",tip:"Le buste reste droit même quand la jambe tourne.",interet:"Combine rotation et équilibre sur une jambe, exigeant en gainage."},
+  {id:26,nom:"Knee up ciseaux",type:"Alterné",temps:8,niveau:3,video:"videos/26_Knee_up_ciseaux.mp4",poster:"posters/26_Knee_up_ciseaux.jpg",tip:"Les ciseaux doivent rester contrôlés, pas de à-coups.",interet:"Développe le contrôle du mouvement croisé des jambes."},
+  {id:27,nom:"Genou L",type:"Alterné",temps:8,niveau:3,video:"videos/27_Genou_L.mp4",poster:"posters/27_Genou_L.jpg",tip:"Trace bien la forme du L avec ta jambe libre.",interet:"Renforce la précision du placement du pied libre."},
+  {id:28,nom:"Genou L tapé derrière",type:"Alterné",temps:8,niveau:3,video:"videos/28_Genou_L_tape_derriere.mp4",poster:"posters/28_Genou_L_tape_derriere.jpg",tip:"Sens la tape derrière comme un rebond léger, pas un coup.",interet:"Travaille la coordination arrière, moins naturelle que l'avant."},
+  {id:29,nom:"Genou L touché step",type:"Alterné",temps:8,niveau:3,video:"videos/29_Genou_L_touche_step.mp4",poster:"posters/29_Genou_L_touche_step.jpg",tip:"Touche le step avec précision avant de reposer le pied au sol.",interet:"Développe la précision fine du contact pied-step."},
+  {id:30,nom:"Kick simple",type:"Alterné",temps:4,niveau:1,video:"videos/30_Kick_simple.mp4",poster:"posters/30_Kick_simple.jpg",tip:"Le kick part de la hanche, la jambe reste tonique mais pas raide.",interet:"Sollicite les ischio-jambiers et le fléchisseur de hanche, bon cardio."},
+  {id:31,nom:"Kick impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/31_Kick_impulsion.mp4",poster:"posters/31_Kick_impulsion.jpg",tip:"L'impulsion vient des mollets, reste léger sur l'appui.",interet:"Ajoute une impulsion, augmente l'intensité cardio-vasculaire."},
+  {id:32,nom:"Heel up simple",type:"Alterné",temps:4,niveau:1,video:"videos/32_Heel_up_simple.mp4",poster:"posters/32_Heel_up_simple.jpg",tip:"Le talon vient taper vers la fesse, pas juste plier le genou.",interet:"Renforce les ischio-jambiers, complémentaire du kick."},
+  {id:33,nom:"Heel up impulsion",type:"Alterné",temps:4,niveau:2,video:"videos/33_Heel_up_impulsion.mp4",poster:"posters/33_Heel_up_impulsion.jpg",tip:"Garde le dos droit même en accélérant le talon-fesse.",interet:"Version plus intense, sollicite davantage le système cardio."},
+  {id:34,nom:"Back lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/34_Back_lift_simple.mp4",poster:"posters/34_Back_lift_simple.jpg",tip:"Le regard reste devant, pas besoin de vérifier la jambe qui part en arrière.",interet:"Renforce les fessiers et la chaîne postérieure."},
+  {id:35,nom:"Side lift simple",type:"Alterné",temps:4,niveau:2,video:"videos/35_Side_lift_simple.mp4",poster:"posters/35_Side_lift_simple.jpg",tip:"Garde les hanches stables, seule la jambe part sur le côté.",interet:"Travaille l'abduction de hanche, bon pour la stabilité latérale."},
+  {id:36,nom:"Lunge side",type:"Alterné",temps:4,niveau:2,video:"videos/36_Lunge_side.mp4",poster:"posters/36_Lunge_side.jpg",tip:"Fléchis bien le genou d'appui pour absorber le mouvement.",interet:"Renforce les quadriceps et la mobilité latérale de hanche."},
+  {id:37,nom:"Mambo chassé",type:"Alterné",temps:4,niveau:2,video:"videos/37_Mambo_chasse.mp4",poster:"posters/37_Mambo_chasse.jpg",tip:"Le mambo se danse : laisse le buste suivre légèrement le rythme.",interet:"Ajoute une dimension rythmique et dansée à l'effort cardio."},
+  {id:38,nom:"Kick repeat",type:"Alterné",temps:8,niveau:3,video:"videos/38_Kick_repeat.mp4",poster:"posters/38_Kick_repeat.jpg",tip:"Chaque répétition doit être aussi nette que la première.",interet:"Travaille l'endurance et la régularité du geste sur la durée."},
+  {id:39,nom:"Heel up repeat",type:"Alterné",temps:8,niveau:3,video:"videos/39_Heel_up_repeat.mp4",poster:"posters/39_Heel_up_repeat.jpg",tip:"Garde le même tempo du début à la fin de la série.",interet:"Sollicite les ischio-jambiers en continu, bon pour l'endurance."},
+  {id:40,nom:"Back lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/40_Back_lift_repeat.mp4",poster:"posters/40_Back_lift_repeat.jpg",tip:"Reste gainé pour ne pas te déséquilibrer vers l'avant.",interet:"Renforce la chaîne postérieure sur la durée, exigeant en gainage."},
+  {id:41,nom:"Side lift repeat",type:"Alterné",temps:8,niveau:3,video:"videos/41_Side_lift_repeat.mp4",poster:"posters/41_Side_lift_repeat.jpg",tip:"Contrôle la vitesse, mieux vaut un mouvement propre que rapide.",interet:"Travaille la stabilité latérale de façon répétée, bon pour l'endurance."},
 ];
 
 /* ============ ETAT ============ */
@@ -543,6 +570,7 @@ let state = {
   activeNiveauFilter: 'all',
   builderTypeFilter: 'all',
   builderSearch: '',
+  bibliothequeSearch: '',
   pendingPasId: null
 };
 
@@ -556,6 +584,27 @@ function loadChoregraphies(){
 }
 function saveChoregraphies(){
   try{ localStorage.setItem('choregraphies', JSON.stringify(state.choregraphies)); }catch(e){}
+}
+function loadDraft(){
+  try{
+    const raw = localStorage.getItem('builder_draft');
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return null;
+}
+function saveDraft(){
+  try{
+    localStorage.setItem('builder_draft', JSON.stringify({
+      blocNoms: state.currentBloc.map(p=>p.nom),
+      editingIndex: state.editingIndex,
+      theme: document.getElementById('themeInput')?.value || '',
+      groupe: document.getElementById('groupeInput')?.value || '',
+      classe: document.getElementById('classeInput')?.value || ''
+    }));
+  }catch(e){}
+}
+function clearDraft(){
+  try{ localStorage.removeItem('builder_draft'); }catch(e){}
 }
 
 /* ============ NAVIGATION ============ */
@@ -595,10 +644,16 @@ document.querySelectorAll('[data-filter-niveau]').forEach(c=>{
   });
 });
 
+document.getElementById('bibliothequeSearch').addEventListener('input', (e)=>{
+  state.bibliothequeSearch = e.target.value.trim().toLowerCase();
+  renderPasGrid();
+});
+
 function filteredPas(){
   return PAS.filter(p=>{
     if(state.activeTypeFilter!=='all' && p.type!==state.activeTypeFilter) return false;
     if(state.activeNiveauFilter!=='all' && p.niveau!==parseInt(state.activeNiveauFilter)) return false;
+    if(state.bibliothequeSearch && !p.nom.toLowerCase().includes(state.bibliothequeSearch)) return false;
     return true;
   });
 }
@@ -613,7 +668,12 @@ function beatDots(temps){
 function renderPasGrid(){
   const grid = document.getElementById('pasGrid');
   grid.innerHTML = '';
-  filteredPas().forEach(p=>{
+  const results = filteredPas();
+  if(results.length===0){
+    grid.innerHTML = '<div class="bloc-empty">Aucun pas ne correspond à ta recherche</div>';
+    return;
+  }
+  results.forEach(p=>{
     const el = document.createElement('div');
     el.className = 'pas-block ' + (p.type==='Simple' ? 'type-simple' : 'type-alterne');
     el.innerHTML = `
@@ -643,6 +703,7 @@ function openPasModal(id){
   document.getElementById('modalTemps').textContent = p.temps + ' temps';
   document.getElementById('modalNiveau').textContent = '⭐'.repeat(p.niveau);
   document.getElementById('modalTip').textContent = '💡 ' + (p.tip || 'Concentre-toi sur la qualité du mouvement plutôt que la vitesse.');
+  document.getElementById('modalInteret').textContent = '🎯 ' + (p.interet || 'Développe la coordination et le rythme.');
   pasOverlay.classList.add('active');
 }
 document.getElementById('modalCloseBtn').addEventListener('click', ()=>{ pasOverlay.classList.remove('active'); document.getElementById('modalVideo').pause(); });
@@ -683,11 +744,20 @@ function renderBuilderLib(){
     const row = document.createElement('div');
     row.className = 'pas-mini';
     row.innerHTML = `<span>${p.nom} <span style="color:var(--text-muted);font-size:11px;">· ${p.temps}t · ${p.type}</span></span>`;
+    const actions = document.createElement('div');
+    actions.style.cssText = 'display:flex;gap:6px;align-items:center;flex-shrink:0;';
+    const playBtn = document.createElement('button');
+    playBtn.className = 'play-mini';
+    playBtn.innerHTML = '▶';
+    playBtn.title = 'Voir la vidéo';
+    playBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openPasModal(p.id); });
     const btn = document.createElement('button');
     btn.className = 'add-mini';
     btn.textContent = '+';
-    btn.addEventListener('click', ()=>{ state.currentBloc.push(p); renderBlocList(); });
-    row.appendChild(btn);
+    btn.addEventListener('click', ()=>{ state.currentBloc.push(p); renderBlocList(); saveDraft(); });
+    actions.appendChild(playBtn);
+    actions.appendChild(btn);
+    row.appendChild(actions);
     lib.appendChild(row);
   });
 }
@@ -705,7 +775,7 @@ function renderBlocList(){
     li.innerHTML = `<span>${i+1}. ${p.nom} <span style="color:var(--text-muted);font-weight:600;">· ${p.temps}t</span></span>`;
     const btn = document.createElement('button');
     btn.textContent = '✕';
-    btn.addEventListener('click', ()=>{ state.currentBloc.splice(i,1); renderBlocList(); });
+    btn.addEventListener('click', ()=>{ state.currentBloc.splice(i,1); renderBlocList(); saveDraft(); });
     li.appendChild(btn);
     list.appendChild(li);
   });
@@ -755,6 +825,7 @@ document.getElementById('saveChoreoBtn').addEventListener('click', ()=>{
     state.choregraphies.push(data);
   }
   resetBuilderForm();
+  clearDraft();
   saveChoregraphies();
   updateHomeStats();
   showScreen('choregraphies');
@@ -776,10 +847,53 @@ function editChoregraphie(idx){
   document.getElementById('groupeInput').value = c.groupe || '';
   document.getElementById('classeInput').value = c.classe || '';
   document.getElementById('editingBanner').style.display = 'block';
+  saveDraft();
   showScreen('builder');
 }
 
 /* ============ CHOREGRAPHIES ENREGISTREES ============ */
+/* ============ EXPORT / IMPORT CHOREGRAPHIES ============ */
+document.getElementById('exportChoreoBtn').addEventListener('click', ()=>{
+  if(state.choregraphies.length===0){ alert("Aucune chorégraphie à exporter pour l'instant."); return; }
+  const blob = new Blob([JSON.stringify(state.choregraphies, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const dateStr = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = `choregraphies-step-${dateStr}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+document.getElementById('importChoreoBtn').addEventListener('click', ()=>{
+  document.getElementById('importChoreoFile').click();
+});
+document.getElementById('importChoreoFile').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const imported = JSON.parse(ev.target.result);
+      if(!Array.isArray(imported)) throw new Error('format invalide');
+      let added = 0;
+      imported.forEach(c=>{
+        const exists = state.choregraphies.some(existing =>
+          existing.theme===c.theme && existing.classe===c.classe && existing.date===c.date && existing.pas?.join()===c.pas?.join()
+        );
+        if(!exists){ state.choregraphies.push(c); added++; }
+      });
+      saveChoregraphies();
+      updateHomeStats();
+      renderChoregraphies();
+      alert(`${added} chorégraphie(s) importée(s)` + (imported.length-added>0 ? ` (${imported.length-added} déjà présente(s), ignorée(s))` : ''));
+    }catch(err){
+      alert("Ce fichier ne semble pas être une sauvegarde valide.");
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
 function renderChoregraphies(){
   const wrap = document.getElementById('choreoListWrap');
   wrap.innerHTML = '';
@@ -822,6 +936,15 @@ function renderChoregraphies(){
 /* ============ INIT ============ */
 (function init(){
   state.choregraphies = loadChoregraphies();
+  const draft = loadDraft();
+  if(draft && draft.blocNoms && draft.blocNoms.length){
+    state.currentBloc = draft.blocNoms.map(nom => PAS.find(p=>p.nom===nom)).filter(Boolean);
+    state.editingIndex = draft.editingIndex ?? null;
+    document.getElementById('themeInput').value = draft.theme || '';
+    document.getElementById('groupeInput').value = draft.groupe || '';
+    document.getElementById('classeInput').value = draft.classe || '';
+    if(state.editingIndex !== null) document.getElementById('editingBanner').style.display = 'block';
+  }
   updateHomeStats();
   renderPasGrid();
 })();
