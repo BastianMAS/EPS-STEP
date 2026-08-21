@@ -1,4 +1,4 @@
-const CACHE_NAME = "step-eps-v7";
+const CACHE_NAME = "step-eps-v8";
 const PRECACHE_URLS = [
   "./",
   "./index.html",

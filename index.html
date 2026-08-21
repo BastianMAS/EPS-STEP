@@ -129,6 +129,14 @@
   }
   .chip.active{background:var(--lime);color:#12141C;border-color:var(--lime);}
 
+  .mode-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .mode-label{font-size:12px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;}
+  .pas-block.locked{opacity:0.45;}
+  .pas-block.locked .type-badge{background:var(--surface);}
+  .lock-badge{position:absolute;top:12px;left:12px;font-size:13px;z-index:1;}
+  .vu-toggle-btn{background:var(--surface-raised);border:1px solid var(--border);color:var(--text);}
+  .vu-toggle-btn.is-vu{border-color:var(--lime);color:var(--lime);}
+
   .pas-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
   .pas-block{
     background:var(--surface);
@@ -373,6 +381,12 @@
       </div>
       <div class="screen-sub">Cherche, filtre par type ou niveau, clique sur un pas pour voir la vidéo.</div>
 
+      <div class="mode-row">
+        <span class="mode-label">Mode :</span>
+        <div class="chip active" data-mode="lycee">Lycée (tout débloqué)</div>
+        <div class="chip" data-mode="college">Collège (déblocage progressif)</div>
+      </div>
+
       <input class="search-input" id="bibliothequeSearch" placeholder="🔍 Chercher un pas..." style="max-width:400px;">
 
       <div class="filters" id="typeFilters">
@@ -406,10 +420,16 @@
             <div class="chip" data-builder-filter-type="Simple">Simple</div>
             <div class="chip" data-builder-filter-type="Alterné">Alterné</div>
           </div>
+          <div class="mode-row" id="builderOverrideRow" style="display:none;">
+            <div class="chip" id="builderShowAllChip">👁 Voir tous les pas (même non enseignés)</div>
+          </div>
           <div class="builder-lib" id="builderLib"></div>
         </div>
         <div class="builder-panel">
-          <div id="editingBanner" style="display:none;background:var(--surface-raised);border:1px solid var(--lime);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--lime);font-weight:700;margin-bottom:14px;">✎ Modification d'une chorégraphie existante</div>
+          <div id="editingBanner" style="display:none;background:var(--surface-raised);border:1px solid var(--lime);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--lime);font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+            <span>✎ Modification d'une chorégraphie existante</span>
+          </div>
+          <button class="btn-io" id="clearBuilderBtn" style="width:100%;margin-bottom:14px;display:none;">↺ Nouveau bloc / Annuler</button>
 
           <label>Thème</label>
           <input class="theme-input" id="themeInput" placeholder="Ex. Rythme &amp; énergie" oninput="saveDraft()">
@@ -511,6 +531,7 @@
     </div>
     <div class="tip-box" id="modalTip">💡 —</div>
     <div class="interet-box" id="modalInteret">🎯 —</div>
+    <button class="btn vu-toggle-btn" id="modalVuBtn" style="display:none;margin-bottom:10px;">Marquer comme enseigné</button>
     <button class="btn btn-ghost" id="modalCloseBtn" style="margin-top:0;">Fermer</button>
   </div>
 </div>
@@ -571,10 +592,29 @@ let state = {
   builderTypeFilter: 'all',
   builderSearch: '',
   bibliothequeSearch: '',
-  pendingPasId: null
+  pendingPasId: null,
+  mode: 'lycee',          // 'lycee' | 'college'
+  pasVus: [],             // ids des pas marqués enseignés (mode collège)
+  builderShowAll: false   // dérogation temporaire au filtre collège dans le créateur
 };
 
 /* ============ STORAGE HELPERS (localStorage — persiste sur l'iPad, hors ligne) ============ */
+function loadMode(){
+  try{ return localStorage.getItem('mode') || 'lycee'; }catch(e){ return 'lycee'; }
+}
+function saveMode(){
+  try{ localStorage.setItem('mode', state.mode); }catch(e){}
+}
+function loadPasVus(){
+  try{
+    const raw = localStorage.getItem('pas_vus');
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return [];
+}
+function savePasVus(){
+  try{ localStorage.setItem('pas_vus', JSON.stringify(state.pasVus)); }catch(e){}
+}
 function loadChoregraphies(){
   try{
     const raw = localStorage.getItem('choregraphies');
@@ -627,6 +667,22 @@ function updateHomeStats(){
 }
 
 /* ============ BIBLIOTHEQUE ============ */
+document.querySelectorAll('[data-mode]').forEach(c=>{
+  c.addEventListener('click', ()=>{
+    document.querySelectorAll('[data-mode]').forEach(x=>x.classList.remove('active'));
+    c.classList.add('active');
+    state.mode = c.dataset.mode;
+    saveMode();
+    document.getElementById('builderOverrideRow').style.display = state.mode==='college' ? 'flex' : 'none';
+    renderPasGrid();
+    renderBuilderLib();
+  });
+});
+
+function isVu(p){
+  return state.mode==='lycee' || state.pasVus.includes(p.id);
+}
+
 document.querySelectorAll('[data-filter-type]').forEach(c=>{
   c.addEventListener('click', ()=>{
     document.querySelectorAll('[data-filter-type]').forEach(x=>x.classList.remove('active'));
@@ -675,8 +731,10 @@ function renderPasGrid(){
   }
   results.forEach(p=>{
     const el = document.createElement('div');
-    el.className = 'pas-block ' + (p.type==='Simple' ? 'type-simple' : 'type-alterne');
+    const locked = !isVu(p);
+    el.className = 'pas-block ' + (p.type==='Simple' ? 'type-simple' : 'type-alterne') + (locked ? ' locked' : '');
     el.innerHTML = `
+      ${locked ? '<div class="lock-badge">🔒</div>' : ''}
       <div class="type-badge">${p.type}</div>
       <div class="video-ph" style="background-image:url('${p.poster}')"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
       <h4>${p.nom}</h4>
@@ -704,8 +762,25 @@ function openPasModal(id){
   document.getElementById('modalNiveau').textContent = '⭐'.repeat(p.niveau);
   document.getElementById('modalTip').textContent = '💡 ' + (p.tip || 'Concentre-toi sur la qualité du mouvement plutôt que la vitesse.');
   document.getElementById('modalInteret').textContent = '🎯 ' + (p.interet || 'Développe la coordination et le rythme.');
+  const vuBtn = document.getElementById('modalVuBtn');
+  if(state.mode==='college'){
+    vuBtn.style.display = 'block';
+    const vu = state.pasVus.includes(id);
+    vuBtn.textContent = vu ? '✓ Enseigné' : 'Marquer comme enseigné';
+    vuBtn.classList.toggle('is-vu', vu);
+  } else {
+    vuBtn.style.display = 'none';
+  }
   pasOverlay.classList.add('active');
 }
+document.getElementById('modalVuBtn').addEventListener('click', ()=>{
+  const id = state.pendingPasId;
+  const idx = state.pasVus.indexOf(id);
+  if(idx===-1) state.pasVus.push(id); else state.pasVus.splice(idx,1);
+  savePasVus();
+  openPasModal(id);
+  renderPasGrid();
+});
 document.getElementById('modalCloseBtn').addEventListener('click', ()=>{ pasOverlay.classList.remove('active'); document.getElementById('modalVideo').pause(); });
 
 /* ============ BUILDER ============ */
@@ -721,10 +796,16 @@ document.querySelectorAll('[data-builder-filter-type]').forEach(c=>{
     renderBuilderLib();
   });
 });
+document.getElementById('builderShowAllChip').addEventListener('click', (e)=>{
+  state.builderShowAll = !state.builderShowAll;
+  e.target.classList.toggle('active', state.builderShowAll);
+  renderBuilderLib();
+});
 function filteredBuilderPas(){
   return PAS.filter(p=>{
     if(state.builderTypeFilter!=='all' && p.type!==state.builderTypeFilter) return false;
     if(state.builderSearch && !p.nom.toLowerCase().includes(state.builderSearch)) return false;
+    if(state.mode==='college' && !state.builderShowAll && !isVu(p)) return false;
     return true;
   });
 }
@@ -736,7 +817,10 @@ function renderBuilderLib(){
   const lib = document.getElementById('builderLib');
   const results = filteredBuilderPas();
   if(results.length===0){
-    lib.innerHTML = '<div class="bloc-empty">Aucun pas ne correspond à ta recherche</div>';
+    const msg = (state.mode==='college' && !state.builderShowAll)
+      ? "Aucun pas enseigné pour l'instant — marque des pas comme \"enseignés\" dans la bibliothèque, ou clique \"Voir tous les pas\" ci-dessus."
+      : 'Aucun pas ne correspond à ta recherche';
+    lib.innerHTML = `<div class="bloc-empty">${msg}</div>`;
     return;
   }
   lib.innerHTML = '';
@@ -764,6 +848,7 @@ function renderBuilderLib(){
 function renderBlocList(){
   const list = document.getElementById('blocList');
   document.getElementById('blocCount').textContent = state.currentBloc.length;
+  document.getElementById('clearBuilderBtn').style.display = (state.currentBloc.length>0 || state.editingIndex!==null) ? 'block' : 'none';
   if(state.currentBloc.length===0){
     list.innerHTML = '<div class="bloc-empty">Ajoute des pas depuis la liste à gauche</div>';
     updateTempsCounter();
@@ -839,7 +924,15 @@ function resetBuilderForm(){
   document.getElementById('editingBanner').style.display = 'none';
   renderBlocList();
 }
+document.getElementById('clearBuilderBtn').addEventListener('click', ()=>{
+  if(state.currentBloc.length>0 && !confirm('Vider le bloc en cours ? Ce qui n\'est pas sauvegardé sera perdu.')) return;
+  resetBuilderForm();
+  clearDraft();
+});
 function editChoregraphie(idx){
+  if(state.currentBloc.length>0 && state.editingIndex!==idx){
+    if(!confirm('Tu as un bloc en cours non sauvegardé. Le remplacer par cette chorégraphie ?')) return;
+  }
   const c = state.choregraphies[idx];
   state.editingIndex = idx;
   state.currentBloc = c.pas.map(nom => PAS.find(p=>p.nom===nom)).filter(Boolean);
@@ -936,6 +1029,12 @@ function renderChoregraphies(){
 /* ============ INIT ============ */
 (function init(){
   state.choregraphies = loadChoregraphies();
+  state.mode = loadMode();
+  state.pasVus = loadPasVus();
+  if(state.mode==='college'){
+    document.querySelectorAll('[data-mode]').forEach(x=>x.classList.toggle('active', x.dataset.mode==='college'));
+    document.getElementById('builderOverrideRow').style.display = 'flex';
+  }
   const draft = loadDraft();
   if(draft && draft.blocNoms && draft.blocNoms.length){
     state.currentBloc = draft.blocNoms.map(nom => PAS.find(p=>p.nom===nom)).filter(Boolean);
