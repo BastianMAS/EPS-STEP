@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>STEP — EPS</title>
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -45,8 +45,9 @@
     border-right:1px solid var(--border);
     display:flex;flex-direction:column;
     align-items:center;
-    padding:20px 0;
+    padding:20px 0 max(20px, env(safe-area-inset-bottom));
     flex-shrink:0;
+    overflow-y:auto;
   }
   .sidebar .logo{
     width:56px;height:56px;
@@ -78,13 +79,14 @@
   .creator-signature{
     margin-top:auto;
     padding-top:16px;
-    opacity:0.35;
+    flex-shrink:0;
+    opacity:0.55;
     transition:opacity .2s;
     display:flex;
     justify-content:center;
   }
-  .creator-signature:hover{opacity:0.8;}
-  .creator-signature img{width:44px;height:auto;display:block;}
+  .creator-signature:hover{opacity:1;}
+  .creator-signature img{width:62px;height:auto;display:block;}
 
   /* ---------- Main content ---------- */
   .main{flex:1;overflow-y:auto;position:relative;}
